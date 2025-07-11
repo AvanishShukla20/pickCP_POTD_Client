@@ -30,8 +30,9 @@ export default function Login() {
       toast.success(`Welcome back, ${user.name}!`);
       navigate("/home");
     } catch (err) {
-      toast.error(err.response?.data?.message || "Login failed");
-    }
+    console.log("Full error:", err.response?.data);
+    toast.error(err.response?.data?.error || "Login failed");
+}
   };
 
   return (
