@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import API from "../utils/api";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/authContext.jsx";
+import { useAuth } from "../context/AuthContext.jsx";
 
 export default function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" });
