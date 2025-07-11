@@ -55,6 +55,9 @@ export default function MainSection() {
     }
     setIsGenerating(true);
     try {
+      const token = localStorage.getItem('token');  // Add this
+      console.log('Token:', token);  // Add this
+      
       const payload = {
         rating: generateOpts.rating || undefined,
         tags: generateOpts.tag
@@ -66,16 +69,18 @@ export default function MainSection() {
         random: generateOpts.random,
         codeforcesHandle: user.codeforcesHandle,
       };
-      const res = await API.post("/cf/potd",
-         payload);
+      console.log('Sending request with payload:', payload);  // Add this
+      
+      const res = await API.post("/cf/potd", payload);
       setPOTD(res.data.problem);
       toast.success("✅ POTD generated!");
-    } catch {
+    } catch (error) {
+      console.error('Error details:', error.response?.data);  // Add this
       toast.error("Failed to generate POTD.");
     } finally {
       setIsGenerating(false);
     }
-  };
+};
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
