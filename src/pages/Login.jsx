@@ -30,9 +30,21 @@ export default function Login() {
       toast.success(`Welcome back, ${user.name}!`);
       navigate("/home");
     } catch (err) {
-    console.log("Full error:", err.response?.data);
-    toast.error(err.response?.data?.error || "Login failed");
-}
+      console.log("Full error:", err.response?.data);
+      
+      // Handle specific error cases
+      if (err.response?.status === 401) {
+        toast.error("❌ Invalid email or password!");
+      } else if (err.response?.status === 404) {
+        toast.error("❌ User not found! Please check your email.");
+      } else if (err.response?.status === 400) {
+        toast.error("❌ Please provide both email and password!");
+      } else if (!navigator.onLine) {
+        toast.error("🌐 No internet connection. Please check your network!");
+      } else {
+        toast.error("⚠️ Something went wrong. Please try again later.");
+      }
+    }
   };
 
   return (
