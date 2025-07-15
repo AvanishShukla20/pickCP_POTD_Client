@@ -10,9 +10,9 @@ export default function Team() {
               Developer
             </h1>
             <p className="max-w-2xl mt-4 text-gray-500 ">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo
-              incidunt ex placeat modi magni quia error alias, adipisci rem
-              similique, at omnis eligendi optio eos harum.
+              He is passionate Full Stack Developer from NIT Raipur, driven by a mission to build websites that solve real-world problems.
+              With hands on experience in  MERN stack (MongoDB, Express.js, React.js, and Node.js) and its modern frameworks, He specializes in creating dynamic, user-friendly web applications.
+              This platform is a project crafted to support aspiring coders. He Bulit this Website that Hepls The Aspiring Coders to track their Codeforces streak, stay consistent, and level up their skills in competitive programming !
             </p>
           </div>
 

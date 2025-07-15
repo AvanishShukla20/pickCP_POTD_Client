@@ -53,16 +53,7 @@ export default function Feature() {
               <circle cx={12} cy={7} r={4}></circle>
             </svg>
           </div>
-          <div className="flex-grow sm:text-left text-center mt-6 sm:mt-0">
-            <h2 className="text-gray-900 text-lg title-font font-medium mb-2">
-              Customizable Filters
-            </h2>
-            <p className="leading-relaxed text-base">
-              Blue bottle crucifix vinyl post-ironic four dollar toast vegan
-              taxidermy. Gastropub indxgo juice poutine.
-            </p>
-            
-          </div>
+          
         </div>
       </div>
     </section>
