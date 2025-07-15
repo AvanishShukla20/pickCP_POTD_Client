@@ -53,10 +53,18 @@ export default function MainSection() {
       toast.error("Please set your CF handle.");
       return;
     }
+
+    // Check if user has already completed POTD for today
+    const hasCompletedToday = solvedDates.some(date => isSameDay(date, new Date()));
+    if (hasCompletedToday) {
+      toast.info("🎯 You've already completed your POTD for today!");
+      return;
+    }
+
     setIsGenerating(true);
     try {
-      const token = localStorage.getItem('token');  // Add this
-      console.log('Token:', token);  // Add this
+      const token = localStorage.getItem('token');
+      console.log('Token:', token);
       
       const payload = {
         rating: generateOpts.rating || undefined,
