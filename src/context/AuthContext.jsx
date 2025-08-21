@@ -11,7 +11,7 @@ export const AuthProvider = ({ children }) => {
 
   const [token, setToken] = useState(() => localStorage.getItem("token") || null);
 
-  // Set token to Axios headers if exists
+  // Keep axios header in sync with token
   useEffect(() => {
     if (token) {
       API.defaults.headers.common["Authorization"] = `Bearer ${token}`;
