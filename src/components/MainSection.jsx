@@ -25,8 +25,19 @@ export default function MainSection() {
   (async () => {
     try {
       const res = await API.get("/cf/get-solved-dates");
-      const solved = res.data.data ?? []; // grab the `data` property from response
+
+      const solved = res.data.dates ?? []; // grab the `data` property from response
+
+      // set date to local timezone
+      
+      const toLocalDate = (s) => {
+      const [y, m, d] = s.split("-").map(Number);
+      return new Date(y, m - 1, d); // month is 0-based
+    };
+
+
       setSolvedDates(solved.map(d => new Date(d)));
+
     } catch (err) {
       console.error(err);
       toast.error("Unable to fetch solved dates.");
