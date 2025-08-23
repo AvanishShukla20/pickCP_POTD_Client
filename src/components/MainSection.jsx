@@ -24,8 +24,9 @@ export default function MainSection() {
 
   (async () => {
     try {
-      const { data } = await API.get("/cf/get-solved-dates");
-      setSolvedDates((data?.dates ?? []).map((d) => new Date(d)));
+      const res = await API.get("/cf/get-solved-dates");
+      const solved = res.data.data ?? []; // grab the `data` property from response
+      setSolvedDates(solved.map(d => new Date(d)));
     } catch (err) {
       console.error(err);
       toast.error("Unable to fetch solved dates.");
