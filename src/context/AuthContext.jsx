@@ -4,14 +4,18 @@ import API from "../utils/api"; // axios instance
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+
+  // user state initialized from localStorage
   const [user, setUser] = useState(() => {
     const saved = localStorage.getItem("user");
     return saved ? JSON.parse(saved) : null;
   });
 
+  // token state initialized from localStorage
   const [token, setToken] = useState(() => localStorage.getItem("token") || null);
 
-  // Keep axios header in sync with token
+  // Keep axios header in sync with token runs on token change(login/logout, refresh)
+  
   useEffect(() => {
     if (token) {
       API.defaults.headers.common["Authorization"] = `Bearer ${token}`;

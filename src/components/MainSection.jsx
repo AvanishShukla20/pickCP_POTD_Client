@@ -2,11 +2,14 @@ import React, { useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import API from "../utils/api";
+import { useAuth } from "../context/AuthContext";
 import { isSameDay } from "date-fns";
 import { toast } from "react-toastify";
 
 export default function MainSection() {
-  const [user, setUser] = useState(null);
+
+   const { user, token } = useAuth(); 
+
   const [potd, setPOTD] = useState(null);
   const [solvedDates, setSolvedDates] = useState([]);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -17,16 +20,26 @@ export default function MainSection() {
   });
 
   useEffect(() => {
-    const u = JSON.parse(localStorage.getItem("user"));
-    setUser(u);
+    if (!user || !token) return; // guard until authenticated
 
-    API.get("/cf/get-solved-dates")
-      .then((res) => res.data.dates.map((d) => new Date(d)))
-      .then(setSolvedDates)
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+    let cancelled = false;
+
+    (async () => {
+      try {
+        const { data } = await API.get("/cf/get-solved-dates");
+        const dates = (data?.dates ?? []).map((d) => new Date(d));
+        if (!cancelled) setSolvedDates(dates);
+      } catch (err) {
+        console.error(err);
+        toast.error("Unable to fetch solved dates.");
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [user, token]); 
+
 
   const disableFuture = (date) => date > new Date();
 
@@ -63,9 +76,6 @@ export default function MainSection() {
 
     setIsGenerating(true);
     try {
-      const token = localStorage.getItem('token');
-      console.log('Token:', token);
-      
       const payload = {
         rating: generateOpts.rating || undefined,
         tags: generateOpts.tag

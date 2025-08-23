@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; 
 import Register from "./pages/Register";
 import Login from "./pages/Login";
-import About from "./pages/About.jsx";
+import About from "./pages/About";
 import Home from "./pages/Home";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
