@@ -20,26 +20,18 @@ export default function MainSection() {
   });
 
   useEffect(() => {
-    if (!user || !token) return; // guard until authenticated
+  if (!user || !token) return; // guard until authenticated
 
-    let cancelled = false;
-
-    (async () => {
-      try {
-        const { data } = await API.get("/cf/get-solved-dates");
-        const dates = (data?.dates ?? []).map((d) => new Date(d));
-        if (!cancelled) setSolvedDates(dates);
-      } catch (err) {
-        console.error(err);
-        toast.error("Unable to fetch solved dates.");
-      }
-    })();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [user, token]); 
-
+  (async () => {
+    try {
+      const { data } = await API.get("/cf/get-solved-dates");
+      setSolvedDates((data?.dates ?? []).map((d) => new Date(d)));
+    } catch (err) {
+      console.error(err);
+      toast.error("Unable to fetch solved dates.");
+    }
+  })();
+}, [user, token]);
 
   const disableFuture = (date) => date > new Date();
 
