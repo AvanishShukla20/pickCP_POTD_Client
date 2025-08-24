@@ -105,7 +105,7 @@ export default function Login() {
           className="inline-flex items-center justify-center w-10 h-10 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
           title="Go to Home"
         >
-          🏠
+          Home
         </button>
       </div>
       </div>
