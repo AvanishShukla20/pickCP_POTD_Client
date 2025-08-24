@@ -220,7 +220,7 @@ export default function MainSection() {
 
       <div className="mt-10 flex justify-center items-center shadow-lg p-6 max-w-md mx-auto">
         <Calendar
-          className="!border-0 text-gray-900"
+          className="!border-0 text-gray-900 calendar-custom"
           onClickDay={(date) => {
             if (!disableFuture(date) && isSameDay(date, new Date()) && canMark) {
               handleMarkSolved();
@@ -230,14 +230,14 @@ export default function MainSection() {
             if (view === "month") {
               const solved = solvedDates.some((d) => isSameDay(d, date));
               return [
-                "text-sm",
-                "transition-colors",
-                "text-gray-900",
-                "duration-200",
-                "ease-in-out",
+                "!text-sm",
+                "!transition-colors",
+                solved ? "!text-white" : "!text-gray-900",
+                "!duration-200",
+                "!ease-in-out",
                 solved
-                  ? "bg-green-400 text-white rounded-full"
-                  : "hover:bg-blue-100 text-gray-900 rounded-md",
+                  ? "!bg-green-400 !rounded-full"
+                  : "hover:!bg-blue-100 !rounded-md",
               ].join(" ");
             }
           }}
