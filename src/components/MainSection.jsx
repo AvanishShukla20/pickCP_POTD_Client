@@ -3,12 +3,12 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import API from "../utils/api";
 import { useAuth } from "../context/AuthContext";
-import { isSameDay } from "date-fns";
+import { isSameDay, startOfToday } from "date-fns";
 import { toast } from "react-toastify";
 
 export default function MainSection() {
 
-   const { user, token } = useAuth(); 
+  const { user, token } = useAuth(); 
 
   const [potd, setPOTD] = useState(null);
   const [solvedDates, setSolvedDates] = useState([]);
@@ -20,34 +20,40 @@ export default function MainSection() {
   });
 
   useEffect(() => {
-  if (!user || !token) return; // guard until authenticated
+    if (!user || !token) return; // guard until authenticated
 
-  (async () => {
-    try {
-      const res = await API.get("/cf/get-solved-dates");
+    // Helper: convert "YYYY-MM-DD" (or any parseable date) to LOCAL midnight
+    const toLocalMidnight = (input) => {
+      const d = new Date(input);
+      return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    };
 
-      const solved = res.data.dates ?? []; // grab the `data` property from response
-      setSolvedDates(solved.map(d => new Date(d)));
-
-    } catch (err) {
-      console.error(err);
-      toast.error("Unable to fetch solved dates.");
-    }
-  })();
-}, [user, token]);
+    (async () => {
+      try {
+        const res = await API.get("/cf/get-solved-dates");
+        const solved = res.data.dates ?? []; // grab the `dates` array from response
+        // Normalize all incoming dates to local midnight for reliable day comparisons
+        setSolvedDates(solved.map(toLocalMidnight));
+      } catch (err) {
+        console.error(err);
+        toast.error("Unable to fetch solved dates.");
+      }
+    })();
+  }, [user, token]);
 
   const disableFuture = (date) => date > new Date();
 
   const canMark =
     potd &&
-    !solvedDates.find((d) => isSameDay(d, new Date()));
+    !solvedDates.find((d) => isSameDay(d, startOfToday()));
 
   const handleMarkSolved = async () => {
     try {
       await API.post("/cf/mark-potd", {
         problemId: `${potd.contestId}-${potd.index}`,
       });
-      setSolvedDates((prev) => [...prev, new Date()]);
+      // Append today's date normalized to local midnight
+      setSolvedDates((prev) => [...prev, startOfToday()]);
       setPOTD(null);
       toast.success("🎉 Marked as completed!");
     } catch {
@@ -61,8 +67,8 @@ export default function MainSection() {
       return;
     }
 
-    // Check if user has already completed POTD for today
-    const hasCompletedToday = solvedDates.some(date => isSameDay(date, new Date()));
+    // Check if user has already completed POTD for today (compare using local midnight)
+    const hasCompletedToday = solvedDates.some(date => isSameDay(date, startOfToday()));
     if (hasCompletedToday) {
       toast.info("🎯 You've already completed your POTD for today!");
       return;
@@ -91,7 +97,7 @@ export default function MainSection() {
     } finally {
       setIsGenerating(false);
     }
-};
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
@@ -221,7 +227,7 @@ export default function MainSection() {
         <Calendar
           className="!border-0 text-gray-900"
           onClickDay={(date) => {
-            if (!disableFuture(date) && isSameDay(date, new Date()) && canMark) {
+            if (!disableFuture(date) && isSameDay(date, startOfToday()) && canMark) {
               handleMarkSolved();
             }
           }}
@@ -235,8 +241,8 @@ export default function MainSection() {
                 "duration-200",
                 "ease-in-out",
                 solved
-                  ? "!bg-green-400 !text-white !rounded-full px-2 py-1"
-                  : "!hover:bg-blue-100 text-gray-900 rounded-md",
+                  ? "bg-green-400 text-white rounded-full px-2 py-1"
+                  : "hover:bg-blue-100 text-gray-900 rounded-md",
               ].join(" ");
             }
           }}
