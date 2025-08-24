@@ -235,8 +235,8 @@ export default function MainSection() {
                 "duration-200",
                 "ease-in-out",
                 solved
-                  ? "bg-green-400 text-yellow rounded-full"
-                  : "hover:bg-blue-100 text-gray-900 rounded-md",
+                  ? "!bg-green-400 !text-white rounded-full"
+                  : "!hover:bg-blue-100 text-gray-900 rounded-md",
               ].join(" ");
             }
           }}
