@@ -13,39 +13,32 @@ export default function Login() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    try {
-      const res = await API.post("/users/login", formData);
+  try {
+    const res = await API.post("/users/login", formData);
+    const { token, user } = res.data;
 
-      const { token, user } = res.data;
+    // Use AuthContext to handle state + storage
+    loginContext(user, token);
 
-      // Save to localStorage
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
+    toast.success(`Welcome back, ${user.name}!`);
+    navigate("/home");
+  } catch (err) {
+    console.log("Full error:", err.response?.data);
 
-      // Call context 
-      loginContext(user, token);
-
-      toast.success(`Welcome back, ${user.name}!`);
-      navigate("/home");
-    } catch (err) {
-      console.log("Full error:", err.response?.data);
-      
-      // Handle specific error cases
-      if (err.response?.status === 401) {
-        toast.error("❌ Invalid email or password!");
-      } else if (err.response?.status === 404) {
-        toast.error("❌ User not found! Please check your email.");
-      } else if (err.response?.status === 400) {
-        toast.error("❌ Please provide both email and password!");
-      } else if (!navigator.onLine) {
-        toast.error("🌐 No internet connection. Please check your network!");
-      } else {
-        toast.error("⚠️ Something went wrong. Please try again later.");
-      }
+    if (err.response?.status === 401) {
+      toast.error("❌ Invalid email or password!");
+    } else if (err.response?.status === 404) {
+      toast.error("❌ User not found! Please check your email.");
+    } else if (err.response?.status === 400) {
+      toast.error("❌ Please provide both email and password!");
+    } else {
+      toast.error("⚠️ Something went wrong. Please try again later.");
     }
-  };
+  }
+};
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-300 px-4">
