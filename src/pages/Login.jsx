@@ -99,15 +99,15 @@ export default function Login() {
           </button>
         </div>
         <div className="mt-4 text-center">
-        <button
-          type="button"
-          onClick={() => navigate("/")}
-          className="inline-flex items-center justify-center w-10 h-10 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
-          title="Go to Home"
-        >
-          Home
-        </button>
-      </div>
+          <button
+            type="button"
+            onClick={() => navigate("/")}
+            className="inline-flex items-center justify-center w-12 h-12 bg-blue-600 text-white text-sm font-semibold rounded-md hover:bg-blue-700 transition"
+            title="Go to Home"
+          >
+            Home
+          </button>
+        </div>
       </div>
     </div>
   );
