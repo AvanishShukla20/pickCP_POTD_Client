@@ -27,8 +27,6 @@ export default function Register() {
 
       const { token, user } = res.data;
 
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
 
       loginContext(user, token);
 
@@ -140,7 +138,7 @@ export default function Register() {
           <button
             type="button"
             className="text-blue-400 hover:underline font-medium"
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/login")}
           >
             Login
           </button>
