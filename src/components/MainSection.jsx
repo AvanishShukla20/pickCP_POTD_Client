@@ -235,7 +235,7 @@ export default function MainSection() {
                 "duration-200",
                 "ease-in-out",
                 solved
-                  ? "!bg-green-400 !text-white rounded-full"
+                  ? "!bg-green-400 !text-white !rounded-full px-2 py-1"
                   : "!hover:bg-blue-100 text-gray-900 rounded-md",
               ].join(" ");
             }
