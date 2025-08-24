@@ -98,6 +98,15 @@ export default function Login() {
             Register
           </button>
         </div>
+        <div className="mt-4 text-center">
+          <button
+            type="button"
+            className="w-full bg-blue-600 text-white py-2 rounded-md font-semibold hover:bg-blue-700 transition"
+            onClick={() => navigate("/")}
+          >
+            Home
+          </button>
+        </div>
       </div>
     </div>
   );
