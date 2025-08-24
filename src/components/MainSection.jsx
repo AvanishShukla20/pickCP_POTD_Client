@@ -27,15 +27,6 @@ export default function MainSection() {
       const res = await API.get("/cf/get-solved-dates");
 
       const solved = res.data.dates ?? []; // grab the `data` property from response
-
-      // set date to local timezone
-      
-      const toLocalDate = (s) => {
-      const [y, m, d] = s.split("-").map(Number);
-      return new Date(y, m - 1, d); // month is 0-based
-    };
-
-
       setSolvedDates(solved.map(d => new Date(d)));
 
     } catch (err) {
@@ -49,8 +40,7 @@ export default function MainSection() {
 
   const canMark =
     potd &&
-    !solvedDates.find((d) => isSameDay(d, new Date())) &&
-    !disableFuture(new Date());
+    !solvedDates.find((d) => isSameDay(d, new Date()));
 
   const handleMarkSolved = async () => {
     try {
@@ -91,13 +81,12 @@ export default function MainSection() {
         random: generateOpts.random,
         codeforcesHandle: user.codeforcesHandle,
       };
-      console.log('Sending request with payload:', payload);  // Add this
-      
+
       const res = await API.post("/cf/potd", payload);
       setPOTD(res.data.problem);
       toast.success("✅ POTD generated!");
     } catch (error) {
-      console.error('Error details:', error.response?.data);  // Add this
+      console.error('Error details:', error.response?.data); 
       toast.error("Failed to generate POTD.");
     } finally {
       setIsGenerating(false);
@@ -246,7 +235,7 @@ export default function MainSection() {
                 "duration-200",
                 "ease-in-out",
                 solved
-                  ? "bg-green-400 text-white rounded-full"
+                  ? "bg-green-400 text-yellow rounded-full"
                   : "hover:bg-blue-100 text-gray-900 rounded-md",
               ].join(" ");
             }
