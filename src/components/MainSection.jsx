@@ -6,7 +6,7 @@ import { useAuth } from "../context/AuthContext";
 import { isSameDay } from "date-fns";
 import { toast } from "react-toastify";
 
-export default function MainSection() {
+export default function MainSection() {  
 
    const { user, token } = useAuth(); 
 
@@ -34,6 +34,7 @@ export default function MainSection() {
       toast.error("Unable to fetch solved dates.");
     }
   })();
+
 }, [user, token]);
 
   const disableFuture = (date) => date > new Date();
@@ -44,11 +45,14 @@ export default function MainSection() {
 
   const handleMarkSolved = async () => {
     try {
-      await API.post("/cf/mark-potd", {
-        problemId: `${potd.contestId}-${potd.index}`,
-      });
-      setSolvedDates((prev) => [...prev, new Date()]);
-      setPOTD(null);
+
+      const { data } = await API.post("/cf/mark-potd", {
+      problemId: `${potd.contestId}-${potd.index}`,
+    });
+
+      setSolvedDates(data.dates.map(d => new Date(d)));
+
+    setPOTD(null);
       toast.success("🎉 Marked as completed!");
     } catch {
       toast.error("Failed to mark POTD.");
